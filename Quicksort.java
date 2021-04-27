@@ -1,6 +1,5 @@
 import java.lang.Math;
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.*;
 
 public class Quicksort<AnyType>
 {
@@ -12,6 +11,7 @@ public class Quicksort<AnyType>
             BinaryTree binaryTree = new BinaryTree();
             
             quicksort( binaryTree, a, 0, a.length - 1);
+            
             return binaryTree;
         }
     
@@ -43,18 +43,19 @@ public class Quicksort<AnyType>
             else
             {
                 /**
+                 * Apr 26, 10:00 AM
+                 * Implementation of first turn-in must be improved.
                  * FIXME: 
-                 * - don't use median-of-three partitioning. something better.
+                 * - use median-of-three partitioning, but with something better.
                  * - Also fix the pivot.
-                 * - Fix the algo so the array stores all elems of the tree.
                  * 
                  * So far:
                  * 
                  * CHOOSING A PIVOT
                  * 
                  * Take two averages:
-                     * 1 for the first half of array
-                     * 1 for the second half of array
+                     * 1 for the first half of array's first and last elements.
+                     * 1 for the second half of array's first and last elements.
                  * If either of these averages are between 33 and 66,
                      * this will be the used average.
                  * 
@@ -75,22 +76,35 @@ public class Quicksort<AnyType>
                      * 
                      * then "Somewhere" is the pivot.
                  * 
-                 * 
                  * int min = Collections.min(Arrays.asList(a));
                  * int max = Collections.max(Arrays.asList(a));
+                 * 
+                 * ---------------------------------------------------------------------
+                 * 10:37 PM
+                 * The plan is now to implement a randomized median-of-three.
+                 * That is, select three elements at random and then finally select their
+                 * median as a pivot.
                  */
-                // Sort low, middle, high--by median-of-three partitioning.
-                int middle = (low + high) / 2;
-                if ( a[ middle ].compareTo( a[ low ] ) < 0 )
-                    swapReferences( a, low, middle );
-                if ( a[ high ].compareTo( a[ low ] ) < 0 )
-                    swapReferences( a, low, high );
-                if ( a[ high ].compareTo( a[ middle ] ) < 0 )
-                    swapReferences( a, middle, high );
                 
+                int elem_1 = (int)(Math.random() * (high-low) );
+                int elem_2 = (int)(Math.random() * (high-low) );
+                int elem_3 = (int)(Math.random() * (high-low) );
                 
-                AnyType pivot = a[ middle ];
+                // Sorting the first, second, and third random elements.
+                if (a[ elem_2 ].compareTo( a[ elem_1 ] ) < 0) 
+                    swapReferences( a, elem_1, elem_2 );
                 
+                if (a[ elem_3 ].compareTo( a[ elem_1 ] ) < 0)
+                    swapReferences( a, elem_1, elem_3 );
+                
+                if (a[ elem_3 ].compareTo ( a[ elem_2 ] ) < 0)
+                    swapReferences( a, elem_2, elem_3 );
+                
+                // selecting the median of the three randoms as a pivot.
+                // swapReferences( a, elem_2, high-1 );
+                AnyType pivot = a[ elem_2 ];
+                
+                // Partitioning process.
                 int i, j;
                 for (i = low, j = high - 1;;)
                 {
@@ -103,18 +117,14 @@ public class Quicksort<AnyType>
                         break;
                     swapReferences( a, i, j );
                 }
-                // Restore pivot
-                swapReferences( a,i,high-1 );
+                // Restore the pivot to its original position
+                swapReferences( a, i, high-1 );
                 
                 // Recursion.
                 quicksort(tree, a, low, i);
                 quicksort(tree, a, i, high);
             }
         }
-    // might return an int to get the new value of p
-    /**
-     * The first param is what we are watching.
-     */
     private static <AnyType> void swapReferences(AnyType[] array, int a, int b)
     {
         AnyType x = array[a];

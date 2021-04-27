@@ -30,6 +30,7 @@ public class BinaryTree<AnyType extends Comparable<? super AnyType>>
         else 
             printTree(root); 
     }
+    
         
     public void makeEmpty( )
         { root = null; }
@@ -103,7 +104,6 @@ public class BinaryTree<AnyType extends Comparable<? super AnyType>>
             printTree( t.right );
         }
     }
-    
     // tree root
     private BinaryNode<AnyType> root;
 }

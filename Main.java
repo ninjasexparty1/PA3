@@ -22,11 +22,9 @@ public class Main
 
             used.add(add);
             unsorted[i] = add;
-            System.out.print(unsorted[i] + " ");
         }
         // 5 31 7 96 58 47 22 16 21 29
         // Place the elements of unsorted into a tree.
-        Quicksort q = new Quicksort();
         BinaryTree tree = Quicksort.<Integer>quicksort(unsorted);
         
         tree.printTree();
